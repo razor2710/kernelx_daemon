@@ -5,11 +5,7 @@
 #include "imgui/imgui_internal.h"
 
 namespace ImGui {
-    //自定义::(控件)小组件
-    IMGUI_API bool          RadioButton(const char* label, float* v, float v_button);
-
-
+    IMGUI_API bool RadioButton(const char* label, float* v, float v_button);
 }
 
-
-#endif //IMGUI_CUSTOMIZE_H
+#endif // GUI_CUSTOMIZE_H
