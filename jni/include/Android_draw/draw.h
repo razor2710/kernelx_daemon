@@ -10,7 +10,6 @@
 #include "Android_vulkan/VulkanGraphics.h"
 #include "ANativeWindowCreator.h"
 
-
 struct Screen {
     float ScreenX;
     float ScreenY;
@@ -18,19 +17,16 @@ struct Screen {
 using namespace std;
 using namespace std::chrono_literals;
 
-
-
 extern int FPS;
-extern float FPF显示;
-extern timer FPS限制;
+extern float FPF_display;
+extern timer FPS_limit;
 
-static bool 防录屏;
+extern bool anti_recording;
 extern int Orientation;
-extern void 加载内存图片(); 
+extern void load_memory_images();
 extern VulkanGraphics VK;
 extern int screen_x, screen_y;
 extern int init_screen_x, init_screen_y;
-
 
 void tick();
 void VK_End();
@@ -41,10 +37,9 @@ void shutdown();
 void AimBotAuto();
 void screen_config();
 void Draw_Main(ImDrawList *Draw);
-int 数据();
-int 音量();
+int input_device_count();
+int volume_monitor();
 int DrawInt();
-//int init_Vulkan(int _screen_x, int _screen_y, bool log = false);
-extern int init_vulkan(int _screen_x, int _screen_y, bool 防录屏);
+extern int init_vulkan(int _screen_x, int _screen_y, bool anti_recording);
 
 #endif
