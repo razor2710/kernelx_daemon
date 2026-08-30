@@ -26,5 +26,3 @@ LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 LOCAL_LDFLAGS := -llog -landroid
 include $(BUILD_EXECUTABLE)
-
-
