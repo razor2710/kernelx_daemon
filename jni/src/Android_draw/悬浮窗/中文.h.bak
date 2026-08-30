@@ -1,0 +1,410 @@
+
+//UI
+bool Tabb, interface3, isDown, isTe;
+void tick() {
+ImGuiIO& io = ImGui::GetIO();
+static ImVec4 clear_color = ImVec4(147,189,64,255);
+
+ImGuiStyle &style = ImGui::GetStyle();
+//UI
+
+style.Colors[ImGuiCol_Text] = ImColor(255, 255, 255, 255);//字体颜色
+style.Colors[ImGuiCol_WindowBg] = ImColor(0, 0, 0);//背景色	
+style.Colors[ImGuiCol_Button] = ImColor(147,189,64,255);//按钮颜色
+style.Colors[ImGuiCol_ButtonHovered] = ImColor(147,189,64,255);//按钮点击后悬停颜色
+style.Colors[ImGuiCol_ButtonActive] = ImColor(147,189,64,255);//按钮点击颜色
+style.Colors[ImGuiCol_FrameBg] = ImColor(147,189,64,150);//控件内背景色
+style.Colors[ImGuiCol_FrameBgActive] = ImColor(147,189,64,160);//控件内点击背景色
+style.Colors[ImGuiCol_FrameBgHovered] = ImColor(147,189,64,160);//控件内点击后悬停背景色
+style.Colors[ImGuiCol_CheckMark] = ImColor(147,189,64,255);//控件Check勾子颜色	
+style.Colors[ImGuiCol_SliderGrab] = ImColor(147,189,64,255);
+style.Colors[ImGuiCol_SliderGrabActive] = ImColor(147,189,64,255);	
+style.Colors[ImGuiCol_Header] = ImColor(147,189,64,255);
+style.Colors[ImGuiCol_HeaderHovered] = ImColor(147,189,64,255);
+style.Colors[ImGuiCol_HeaderActive] = ImColor(147,189,64,255);
+style.Colors[ImGuiCol_ScrollbarBg] = ImColor(42,42,42,225);//滑动条背景颜色
+style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(147,189,64,255);//滑动条颜色
+style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(147,189,64,255);//滚动条点击后悬停
+style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(147,189,64,255);//滑动条点击	
+style.Colors[ImGuiCol_Separator] = ImColor(147,189,64,255);
+
+style.Colors[ImGuiCol_ResizeGrip] = ImColor(147,189,64,255); // 设置为红色
+style.Colors[ImGuiCol_ResizeGripHovered] = ImColor(147,189,64,255); // 设置为红色
+style.Colors[ImGuiCol_ResizeGripActive] = ImColor(147,189,64,255); // 设置为红色
+
+
+
+
+style.GrabRounding = 5.0f;
+style.GrabMinSize = 35.0f;
+
+style.FrameRounding = 5.0f;
+style.FrameBorderSize = 0.5f;
+style.FramePadding = ImVec2(5, 8);//悬浮窗
+
+style.ScrollbarSize = 35.0f;
+style.ScrollbarRounding = 5.0f;
+
+style.WindowBorderSize = 0.0f;
+style.WindowTitleAlign = ImVec2(0.5, 0.5);
+
+// ...之前的代码...
+
+// 动画速度
+static float ANIM_SPEED = 0.53f;
+// 动画进度变量，IsBall为true时从0增加到1，IsBall为false时从1减少到0
+static float Velua = IsBall ? 0.0f : 1.0f;
+// 更新动画进度
+Velua = ImClamp(Velua + (io.DeltaTime / ANIM_SPEED) * (IsBall ? 1.0f : -1.0f), 0.0f, 1.0f);
+
+// 窗口的初始高度和起始宽度
+float windowHeight = 550; // 高度保持不变
+float windowWidth = 850 * Velua; // 宽度随动画进度变化
+
+// 屏幕中间位置
+float screenCenterX = screen_x / 2;
+float screenCenterY = screen_y / 2;
+
+// 窗口起始位置在屏幕中间，垂直方向
+float startPosY = screenCenterY - windowHeight / 2;
+
+// 如果IsBall为true，则窗口从中间向两边展开
+if (IsBall) {
+    // 计算起始位置的X坐标，使得窗口从中间开始展开
+    float startPosX = screenCenterX - windowWidth / 2;
+    // 设置窗口大小和位置
+    ImGui::SetWindowSize("##MORISHIMA CHEAT", ImVec2(windowWidth, windowHeight));
+    ImGui::SetWindowPos("##MORISHIMA CHEAT", ImVec2(startPosX, startPosY));
+} else {
+    // 如果IsBall为false，则窗口从两边向中间收缩
+    // 计算目标位置的X坐标，即屏幕中间位置
+    float targetPosX = screenCenterX - windowWidth / 2;
+    // 设置窗口大小和位置，使用ImLerp进行插值计算位置
+    ImGui::SetWindowSize("##MORISHIMA CHEAT", ImVec2(windowWidth, windowHeight));
+    ImGui::SetWindowPos("##MORISHIMA CHEAT", ImVec2(ImLerp(screenCenterX, targetPosX, Velua), startPosY));
+}
+
+if (windowWidth <= 100 && !IsBall) {
+    BallSwitch = true;
+    MemuSwitch = false;
+}
+
+if (MemuSwitch) {
+style.WindowRounding = 10.0f;
+
+
+     
+if (ImGui::Begin("##MORISHIMA CHEAT", &MemuSwitch,  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar)) {
+
+auto Pos = ImGui::GetWindowPos();
+Window = ImGui::GetCurrentWindow();
+ImDrawList *draw_list = ImGui::GetWindowDrawList();
+
+
+
+if (ImGui::BeginChild("##右菜单", ImVec2(625, 490), false)) {
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+ImGui::TextColored(ImColor(147,189,64,225), "Caesar.");
+ImGui::Separator();
+switch (MenuTab) {
+case 1: {
+ImGuiLayout1();
+}
+break;
+case 2: {
+ImGuiLayout2();
+}
+break;
+case 3: {
+ImGuiLayout3();
+}
+break;
+case 4: {
+ImGuiLayout4();
+}
+}
+}
+
+ImGui::EndChild();
+ImGui::SameLine();
+if (ImGui::BeginChild("##主菜单", ImVec2(150, -1), false, ImGuiWindowFlags_NoScrollbar)) {
+auto Pos = ImGui::GetWindowPos();
+DrawLogo({Pos.x + 83, Pos.y + 93}, 80);
+ImGui::SetCursorPos({0, 180});
+ImGui::Separator();//线
+if (ImGui::Button("主页", ImVec2(150, 50))) {
+MenuTab = 1;
+}
+if (ImGui::Button("绘制", ImVec2(150, 50))) {
+MenuTab = 2;
+}
+if (ImGui::Button("自瞄", ImVec2(150, 50))) {
+MenuTab = 3;
+}
+if (ImGui::Button("设置", ImVec2(150, 50))) {
+MenuTab = 4;
+}
+if (ImGui::Button("缩小", ImVec2(150, 50))) {
+IsBall = false;
+}
+}
+}
+}
+
+
+if (IsWin) {
+IsWin = false;
+IsLoGin = false;
+BallSwitch = false;
+ImGui::SetWindowSize("Ball", {120.0f, 150.0f});
+}
+}
+
+
+
+void ImGuiLayout1() {
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+if (链接驱动) {
+ImGui::Button("重新载入", {-1,70});
+链接驱动 = true;
+} else {
+if (ImGui::Button("载入游戏",{-1,70})) {
+DrawInt();
+链接驱动 = true;				
+}
+}
+if (ImGui::Button("退出程序",{-1,70})) {
+保存配置();
+exit(0);
+}
+ImGui::Text("ApName:com.tencent.ig");
+
+if (链接驱动 == true) {
+ImGui::Separator();
+ImGui::Text("libUE4.so: 0x%lX", 基址头);
+ImGui::Text("PId: %d", 进程); 
+ImGui::Text("UWorId: 0x%lX",Gname);
+ImGui::Text("设备平均值 %.3f ms /帧率 %.1f FPS", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate); 
+ImGui::Text("分辨率：%dx%d", screen_x,screen_y);
+}
+ImGui::Separator();
+ImGui::Text("FPS");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530); // 假设530是你想要放置滑块的位置
+ImGui::Text("%d", FPS); // 显示当前FPS值
+
+// 创建整数滑块
+if (ImGui::SliderInt("FPS", &FPS, 60, 144)) {
+    // 如果滑块的值被改变，执行一些操作
+}
+
+
+
+ImGui::Checkbox("防录屏(需重启后生效)", &Config.自动瞄准.防录屏);
+ImGui::Checkbox("无后台", &Config.人物绘制.无后台);
+ImGui::Checkbox("性能模式", &Config.自动瞄准.性能模式);
+ImGui::Checkbox("显示帧率", &Config.自动瞄准.显示帧率);
+ImGui::Checkbox("备用触摸驱动(旧)", &Config.自动瞄准.触摸驱动);
+}
+
+//绘制菜单
+void ImGuiLayout2() {
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+if (ImGui::Button("一键绘制", {-1, 55})){
+Config.人物绘制.绘制方框 = true;
+Config.人物绘制.绘制射线 = true;
+Config.人物绘制.绘制骨骼 = true;
+Config.人物绘制.绘制名称 = true;
+Config.人物绘制.绘制距离 = true;
+Config.人物绘制.绘制血量 = true;
+Config.人物绘制.绘制雷达 = true;
+Config.人物绘制.手持武器 = true;
+Config.人物绘制.盒子绘制 = true;
+Config.人物绘制.盒子物资 = true;
+Config.人物绘制.载具绘制 = true;
+Config.人物绘制.手雷绘制 = true;
+Config.人物绘制.背敌预警 = true;
+}
+ImGui::Separator();//分割线
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+ImGui::Checkbox("人物方框", &Config.人物绘制.绘制方框);
+ImGui::SameLine();	
+ImGui::Checkbox("人物射线", &Config.人物绘制.绘制射线);
+ImGui::SameLine();	
+ImGui::Checkbox("人物骨骼", &Config.人物绘制.绘制骨骼);
+
+ImGui::Checkbox("人物名称", &Config.人物绘制.绘制名称);
+ImGui::SameLine();	
+ImGui::Checkbox("人物距离", &Config.人物绘制.绘制距离);
+ImGui::SameLine();	
+ImGui::Checkbox("人物血量", &Config.人物绘制.绘制血量);
+
+ImGui::Checkbox("绘制雷达", &Config.人物绘制.绘制雷达);
+ImGui::SameLine();	
+ImGui::Checkbox("手持武器", &Config.人物绘制.手持武器);
+ImGui::SameLine();	
+ImGui::Checkbox("盒子绘制", &Config.人物绘制.盒子绘制);
+
+ImGui::Checkbox("盒子物资", &Config.人物绘制.盒子物资);
+ImGui::SameLine();	
+ImGui::Checkbox("载具绘制", &Config.人物绘制.载具绘制);
+ImGui::SameLine();	
+ImGui::Checkbox("手雷绘制", &Config.人物绘制.手雷绘制);
+
+ImGui::Checkbox("背敌预警", &Config.人物绘制.背敌预警);
+ImGui::SameLine();	
+ImGui::Checkbox("隐藏人机", &Config.人物绘制.隐藏人机);
+
+ImGui::Checkbox("隐藏Draw", &Config.人物绘制.隐藏Draw);
+
+if (Config.人物绘制.隐藏Draw){
+Config.人物绘制.绘制方框 = false;
+Config.人物绘制.绘制射线 = false;
+Config.人物绘制.绘制骨骼 = false;
+Config.人物绘制.绘制名称 = false;
+Config.人物绘制.绘制距离 = false;
+Config.人物绘制.绘制血量 = false;
+Config.人物绘制.绘制雷达 = false;
+Config.人物绘制.手持武器 = false;
+Config.人物绘制.盒子绘制 = false;
+Config.人物绘制.盒子物资 = false;
+Config.人物绘制.载具绘制 = false;
+Config.人物绘制.手雷绘制 = false;
+Config.人物绘制.背敌预警 = false;
+Config.人物绘制.隐藏人机 = false;
+}
+}
+void ImGuiLayout3() {
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+ImGui::Spacing();//间距
+ImGui::Checkbox("触摸自瞄", &Config.自动瞄准.自瞄开关);
+ImGui::SameLine();	
+ImGui::Checkbox("调整触摸位置", &Config.自动瞄准.触摸位置);
+
+
+ImGui::Checkbox("隐藏范围", &Config.自动瞄准.隐藏范围);
+ImGui::SameLine();	
+ImGui::Checkbox("音量快捷", &Config.自动瞄准.音量快捷);
+
+
+ImGui::Text("自瞄范围");
+ImGui::SameLine(ImGui::GetCursorPosX() + 520);
+ImGui::Text("%.0f", Config.自动瞄准.自瞄范围);
+ImGui::SliderFloat("", &Config.自动瞄准.自瞄范围, 10.0f, 1200.0f);
+
+
+if (ImGui::Button("获取开火键",{-1,80})) {
+}
+if (ImGui::Button("获取开境键",{-1,80})) {
+}
+
+
+ImGui::Checkbox("锁定模式", &Config.自动瞄准.持续锁定);
+ImGui::SameLine();
+ImGui::Checkbox("忽略倒地", &Config.自动瞄准.忽略倒地);	
+ImGui::SameLine();	
+ImGui::Checkbox("忽略人机", &Config.自动瞄准.忽略人机);
+
+
+ImGui::Combo("触发条件", &条件, "开火\0开镜\0开火/开镜\0",4);
+    switch (条件) {
+     case 0:
+    Config.自动瞄准.优先方式 = 0.0f;
+    break;
+    case 1:
+    Config.自动瞄准.优先方式 = 1.0f;
+    break;
+    case 2:
+    Config.自动瞄准.优先方式 = 2.0f;
+    break;
+    }
+ImGui::Combo("优先方式", &部位, "头部\0胸部\0腹部\0",4);
+    switch (部位) {
+     case 0:
+    Config.自动瞄准.瞄准部位 = 1.0f;
+    break;
+    case 1:
+    Config.自动瞄准.瞄准部位 = 0.0f;
+    break;
+    case 2:
+    Config.自动瞄准.瞄准部位 = 2.0f;
+    break;
+    }   
+if (ImGui::CollapsingHeader("压枪配置")) {
+ImGui::Text("压枪系数");
+ImGui::SameLine(ImGui::GetCursorPosX() + 540);
+ImGui::Text("%.1f", Config.自动瞄准.压枪参数);    
+SliderFloat("压枪系数", &Config.自动瞄准.压枪参数, 0.10f, 5.00f, "%.1f");
+    }
+    
+
+// 继续为其他参数添加 similar code...
+if (ImGui::CollapsingHeader("基础设置")) {
+ImGui::Text("自瞄速度");
+ImGui::SameLine(ImGui::GetCursorPosX() + 550);
+ImGui::Text("%.0f", Config.自动瞄准.瞄准速度);    
+SliderFloat("自瞄速度", &Config.自动瞄准.瞄准速度, 0.1f, 50.0f, "%.0f");
+
+
+ImGui::Text("滑屏系数");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530);
+ImGui::Text("%.1f", Config.自动瞄准.锁定强度);    
+SliderFloat("滑屏系数", &Config.自动瞄准.锁定强度, 0.1f, 30.0f, "%.1f");
+
+
+ImGui::Text("线速度预判");
+ImGui::SameLine(ImGui::GetCursorPosX() + 540);
+ImGui::Text("%.1f", Config.自动瞄准.预判参数);       
+SliderFloat("线速度预判", &Config.自动瞄准.预判参数, 0.0f, 5.0f, "%.1f");
+
+
+ImGui::Text("子弹下坠预判");
+ImGui::SameLine(ImGui::GetCursorPosX() + 540);
+ImGui::Text("%.1f", Config.自动瞄准.子弹下坠预判);       
+SliderFloat("子弹下坠预判", &Config.自动瞄准.子弹下坠预判, 0.00f, 3.00f, "%.1f");
+
+
+ImGui::Text("自瞄距离");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530);
+ImGui::Text("%.0f", Config.自动瞄准.自瞄距离);       
+SliderFloat("自瞄距离", &Config.自动瞄准.自瞄距离, 0.0f, 600.0f, "%.0f");
+}
+}
+
+void ImGuiLayout4() {
+ImGui::Text("Dadar Settings;");
+ImGui::RadioButton("CN", &Config.自动瞄准.语言, 0.0f);      
+ImGui::SameLine();
+ImGui::RadioButton("EN", &Config.自动瞄准.语言, 1.0f);
+ImGui::Text("x");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530);
+ImGui::Text("%.1f", Config.预警绘制.雷达X轴);       
+SliderFloat("雷达X轴调整", &Config.预警绘制.雷达X轴, 0.0f, 1440.0f, "%0.1f");
+
+ImGui::Text("y");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530);
+ImGui::Text("%.1f", Config.预警绘制.雷达Y轴);       
+SliderFloat("雷达Y轴调整", &Config.预警绘制.雷达Y轴, 0.0f, 3200.0f, "%0.1f");
+
+ImGui::Text("RadarSize");
+ImGui::SameLine(ImGui::GetCursorPosX() + 530);
+ImGui::Text("%.1f", Config.预警绘制.雷达大小);       
+SliderFloat("雷达大小调整", &Config.预警绘制.雷达大小, 50.0f, 500.0f, "%1.0f");
+if (ImGui::Button("重置配置(自动重启)", {-1, 60}))
+{
+ImGuiMenustyle();
+system("rm -rf /data/local/tests/unrestricted/小韩配置");
+system("rm -rf /data/local/tests/unrestricted/小韩配置文件");
+exit(0);
+}
+}
+
+
+
+
+
+

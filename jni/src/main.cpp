@@ -1,0 +1,84 @@
+#include "draw.h"
+#include "res/weiyan.h"
+#include "res/cJSON.h"
+#include "res/cJSON.c"
+#include "res/Encrypt.h"
+
+int Pattern2;
+int Pattern;
+string Record;
+
+char buffer[80] = {0};
+using namespace std;
+//int Pattern;
+float VersionNumber=2.0;//版本
+
+
+
+
+
+
+int main(){
+ int Pattern;
+ std::cout << "- 启动程序 (0) 退出程序 (1) 重新安装 (2)" << std::endl;
+ std::cout << "- Option: ";
+ std::cin >> Pattern;
+
+
+  //验证用户输入
+ while (Pattern < 0 || Pattern > 2) {
+ std::cout << "无效选项，请重新输入：";
+ std::cin >> Pattern;
+ }
+//  等待10秒
+ std::this_thread::sleep_for(std::chrono::seconds(10));
+//  清屏操作，不同的操作系统有不同的命令
+ #ifdef _WIN32
+ system("cls");
+ #else
+ system("clear");
+ #endif
+     printf("    \n\n");
+     printf("  .oooooo.                               \n");
+     printf(" d8P'  'Y8b                              \n");
+     printf("888          .oooo.    .ooooo.    .oooo.o   .oooo.  oooo d8b\n");
+     printf("888         'p  )88b  d88  '88b  d88(  \"8  'p  )88b  '888 8P\n");
+     printf("888          .oP\"888  888ooo888  '\"Y88b.    .oP\"888   888 \n");
+     printf("'88b    ooo d8(  888  888    .o  o.  )88b  d8(  888   888\n");
+     printf(" 'Y8bood8p' 'Y888\"\"8o 'Y8bod8P'  8\"\"888P'  'Y8bood8p'd888p \n");
+    
+ // 根据用户选择执行操作
+cout << endl << "是否开启防录屏(1[是]/0[否])：";
+cin >> Record;
+ cout << endl;
+ if(Record=="0"){
+ 防录屏=false;
+ }else{
+ 防录屏=true;
+ }
+ sleep(1);
+screen_config();	
+init_screen_x = screen_x + screen_y;
+init_screen_y = screen_y + screen_x;
+if (!init_vulkan(init_screen_x, init_screen_y, 防录屏)) exit(0);
+ImGui_init();
+FPS限制.setAffinity();
+FPS限制.SetFps(FPS);
+FPS限制.AotuFPS_init();
+usleep(500);
+new std::thread(AimBotAuto);
+sleep(0.5);
+usleep(600);
+new std::thread(音量);
+usleep(500);
+usleep(500);
+while (true) {
+FPS限制.SetFps(FPS);
+FPF显示 = FPS限制.AotuFPS();
+VK_Begin();
+Draw_Main(ImGui::GetForegroundDrawList());
+tick();
+VK_End();
+}
+shutdown();
+}

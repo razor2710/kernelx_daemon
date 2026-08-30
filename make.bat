@@ -1,0 +1,1 @@
+"C:\Users\kille\AppData\Local\Android\Sdk\ndk\28.2.13676358\ndk-build"
